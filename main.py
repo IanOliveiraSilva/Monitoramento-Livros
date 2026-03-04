@@ -1,3 +1,4 @@
+import cloudscraper
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -9,14 +10,19 @@ NTFY_TOPIC = "jogo_no_sebo_cultural_jp"
 ARQUIVO_MEMORIA = "jogos_vistos.json"
 
 def buscar_jogos():
-    # Usamos um User-Agent para simular um navegador real e evitar bloqueios
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-    resposta = requests.get(URL, headers=headers)
+    # O cloudscraper cria uma sessão que imita um navegador real de forma avançada
+    scraper = cloudscraper.create_scraper(browser={
+        'browser': 'chrome',
+        'platform': 'windows',
+        'desktop': True
+    })
+    
+    # Fazemos o GET usando o scraper em vez do requests
+    resposta = scraper.get(URL)
     resposta.raise_for_status()
     
     soup = BeautifulSoup(resposta.text, 'html.parser')
     
-    # O WooCommerce geralmente usa essa classe para os títulos dos produtos
     titulos = soup.find_all('h2', class_='woocommerce-loop-product__title')
     return [titulo.get_text(strip=True) for titulo in titulos]
 
