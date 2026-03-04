@@ -24,7 +24,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Rodar o script de monitoramento
-        run: python monitor.py
+        run: python main.py
 
       - name: Salvar a memória (Commit do JSON)
         run: |
