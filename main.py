@@ -10,20 +10,20 @@ NTFY_TOPIC = "jogo_no_sebo_cultural_jp"
 ARQUIVO_MEMORIA = "jogos_vistos.json"
 
 def buscar_jogos():
-    # O cloudscraper cria uma sessão que imita um navegador real de forma avançada
     scraper = cloudscraper.create_scraper(browser={
         'browser': 'chrome',
         'platform': 'windows',
         'desktop': True
     })
     
-    # Fazemos o GET usando o scraper em vez do requests
     resposta = scraper.get(URL)
     resposta.raise_for_status()
     
     soup = BeautifulSoup(resposta.text, 'html.parser')
     
-    titulos = soup.find_all('h2', class_='woocommerce-loop-product__title')
+    # A MÁGICA ACONTECE AQUI: Atualizamos a tag e a classe!
+    titulos = soup.find_all('h1', class_='brxe-product-title')
+    
     return [titulo.get_text(strip=True) for titulo in titulos]
 
 def main():
